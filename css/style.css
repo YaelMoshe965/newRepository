@@ -1,23 +1,32 @@
-/* .board {
-    width: 100px;
-    height: 100px;
-    text-align: center;
-    border: 6px solid #948473;
-    background-color: #FFE3C6;
-} */
-
-
 .board {
     padding-top: 20px;
     padding-left: 20px;
 }
 
 td {
-    width: 15px;
-    height: 20px;
+    width: 45px;
+    height: 45px;
     text-align: center;
-    font-size: 30px;
-    padding: 25px;
+    font-size: 20px;
+    padding: 0px;
     background-color: gray;
 }
+
+
+.modal {
+    background-color: rgb(238, 13, 13);
+    display:none;
+    position: absolute;
+    top:10px;
+    right: 10px;
+    padding: 5px;
+    width: 300px;
+    font-size: 30px;
+    font-weight: lighter;
+    font-family: fantasy;
+  }
+  
+  .modal button {
+    float: right;
+  }
 
