@@ -18,7 +18,6 @@ var gLevel = {
 var gIsFirstClick;
 var gLivesLeft;
 var gLivesTotal;
-// var gFirstClickedCellCordinates;
 
 
 var gElTimer = document.querySelector('.timer')
@@ -40,10 +39,7 @@ function initGame() {
     renderBoard(gBoard);
     setMinesNegsCount(gBoard)
     updateLives()
-    // gFirstClickedCellCordinates = null;
     gElTimer.innerText = '000'
-    // var elModal = document.querySelector('.modal');
-    // elModal.style.display = 'none';
     var elSmiley = document.querySelector('.smiley');
     elSmiley.innerText = GAMEISON;
 }
@@ -119,21 +115,24 @@ function buildBoard(size) {
         }
     }
 
+    var previousLocation = [];
     for (var i = 0; i < gLevel.MINES; i++) {
-        var mineLocationI = getRandomIntInclusive(0, (board.length - 1));;
-        var mineLocationJ = getRandomIntInclusive(0, (board.length - 1));;
+        var mineLocationI = getRandomIntInclusive(0, (board.length - 1));
+        var mineLocationJ = getRandomIntInclusive(0, (board.length - 1));
 
+        while (previousLocation.includes(mineLocationI) && previousLocation.includes(mineLocationJ)) {
+            mineLocationI = getRandomIntInclusive(0, (board.length - 1));
+            mineLocationJ = getRandomIntInclusive(0, (board.length - 1));
+        }
+
+        previousLocation = [];
+        previousLocation.push(mineLocationI);
+        previousLocation.push(mineLocationJ);
         board[mineLocationI][mineLocationJ].isMine = true;
         board[mineLocationI][mineLocationJ].minesAroundCount = null;
     }
     return board;
 }
-
-
-// && (gFirstClickedCellCordinates[i] === mineLocationI || gFirstClickedCellCordinates[j] === mineLocationJ)) 
-
-// function placeMines(board) {
-// }
 
 
 function renderBoard(board) {
@@ -164,10 +163,8 @@ function checkClickMouseType(event, elCell, i, j) {
     }
 
     if (gIsFirstClick) {
-        // gFirstClickedCellCordinates = { i: i, j: j };
         gIsFirstClick = false;
         startTimer()
-        // placeMines(gBoard)
     }
 
     switch (event.which) {
@@ -223,6 +220,7 @@ function cellClicked(elCell, i, j) {
         expandShown(gBoard, elCell, i, j);
     } else {
         strHTML = `${cell.minesAroundCount = countMines(i, j, gBoard)}`;
+        getNumberColor(cell.minesAroundCount, i, j);
     }
 
     elCell.innerText = strHTML;
@@ -255,6 +253,7 @@ function expandShown(board, elCell, cellI, cellJ) {
                 currCell.isShown = true;
                 gGame.shownCount++
                 renderCell(i, j, currCell.minesAroundCount);
+                getNumberColor(currCell.minesAroundCount, i, j)
             }
         }
     }
@@ -285,6 +284,24 @@ function countMines(cellI, cellJ, board) {
         }
     }
     return minesSum;
+}
+
+function getNumberColor(number, i, j) {
+    var elCell = document.querySelector(`#cell-${i}-${j}`);
+    switch (number) {
+        case 1:
+            elCell.style.color = 'blue';
+            break;
+        case 2:
+            elCell.style.color = 'green';
+            break;
+        case 3:
+            elCell.style.color = 'red';
+            break;
+        case 4:
+            elCell.style.color = 'orange';
+            break;
+    }
 }
 
 function checkGameOver(board) {
@@ -318,8 +335,3 @@ function checkGameOver(board) {
         }
     }
 }
-
-
-
-
-
